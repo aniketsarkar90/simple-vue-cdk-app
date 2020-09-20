@@ -5,9 +5,39 @@ orbs:
   # Declare a dependency on the welcome-orb
   welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
-workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+
+jobs:
+  build:
+    steps:
+      - checkout
+      - run:
+        name: Install Dependencies
+        command: npm install
+      - run:
+        name: Build the application
+        command: npm run build
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - package.json
+            - node_modules
+            - src
+            - dist
+  deploy-production:
+    steps:
+      - attach_workspace:
+        at: ./
+      - run:
+        name: Deploy the application
+
+workflows:  
+  build-and-deploy:
     jobs:
-      - welcome/run
+      - build
+      - deploy-production:
+        requires:
+          - build
+        filters:
+          branches:
+            only:
+              - master
