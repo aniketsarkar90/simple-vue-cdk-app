@@ -1,34 +1,35 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Use a package of configuration called an orb.
 orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-# Orchestrate or schedule a set of jobs
-
+  aws-s3: circleci/aws-s3@1.0.15
+defaults: &defaults
+  docker:
+    - image: circleci/node:12
 jobs:
   build:
+    <<: *defaults
     steps:
       - checkout
       - run:
         name: Install Dependencies
-        command: npm install
+        command: cd hello-world && npm install
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - .
+  deploy-production:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+        at: ~/
       - run:
         name: Build the application
-        command: npm run build
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - package.json
-            - node_modules
-            - src
-            - dist
-  deploy-production:
-    steps:
-      - attach_workspace:
-        at: ./
-      - run:
-        name: Deploy the application
+        command: cd hello-world && npm run build
+      - aws-s3/sync:
+        from: 'hello-world/dist'
+        to: 's3://simple-vue-cdk-app'
+        overwrite: true
+      - run: exit 0
 
 workflows:  
   build-and-deploy:
