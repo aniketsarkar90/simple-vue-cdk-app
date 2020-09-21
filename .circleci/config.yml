@@ -10,8 +10,8 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Install Dependencies
-        command: cd hello-world && npm install
+          name: Install Dependencies
+          command: cd hello-world && npm install
       - persist_to_workspace:
           root: ~/
           paths:
@@ -21,14 +21,14 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-        at: ~/
+          at: ~/
       - run:
-        name: Build the application
-        command: cd hello-world && npm run build
+          name: Build the application
+          command: cd hello-world && npm run build
       - aws-s3/sync:
-        from: 'hello-world/dist'
-        to: 's3://simple-vue-cdk-app'
-        overwrite: true
+          from: 'hello-world/dist'
+          to: 's3://simple-vue-cdk-app'
+          overwrite: true
       - run: exit 0
 
 workflows:  
