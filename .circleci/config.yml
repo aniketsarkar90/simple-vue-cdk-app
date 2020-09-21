@@ -36,8 +36,9 @@ workflows:
     jobs:
       - build
       - deploy-production:
+          context: circlecis3  
           requires:
-            - build
+              - build
           filters:
             branches:
               only:
