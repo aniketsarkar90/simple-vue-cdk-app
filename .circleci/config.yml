@@ -41,7 +41,6 @@ workflows:
       - cypress/run: 
           requires:
             - "cypress/install"
-
   build-and-deploy:
     jobs:
       - build
