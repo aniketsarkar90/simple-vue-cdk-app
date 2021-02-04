@@ -35,7 +35,7 @@ jobs:
 workflows:  
   cypress-integration:
     jobs:
-      - cypress/run
+      - build
   build-and-deploy:
     jobs:
       - build
