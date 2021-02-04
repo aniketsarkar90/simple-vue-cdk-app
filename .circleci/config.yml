@@ -26,10 +26,10 @@ jobs:
           command: cd hello-world && npm install
       - run:
           name: Building the application
-          command: npm run serve
+          command: cd hello-world npm run serve
       - run: 
           name: Running Tests
-          command: npm run test:components 
+          command: cd hello-world npm run test:components 
       - persist_to_workspace:
           root: ~/
           paths:
