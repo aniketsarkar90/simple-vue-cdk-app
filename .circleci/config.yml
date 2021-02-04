@@ -23,7 +23,7 @@ jobs:
       - checkout
       - run:
           name: Running the application
-          command: cd hello-world && npm install
+          command: cd hello-world && npm install && npm run test:components
       - run:
           name: Building the application
           command: cd hello-world && npm run serve
