@@ -26,10 +26,7 @@ jobs:
           command: cd hello-world && npm install
       - run:
           name: Building the application
-          command: ./node_modules/.bin/cypress run
-      - run: 
-          name: Running Tests
-          command: ./node_modules/.bin/cypress run
+          command: cd hello-world && ./node_modules/.bin/cypress run
       - persist_to_workspace:
           root: ~/
           paths:
