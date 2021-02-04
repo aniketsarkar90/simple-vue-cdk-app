@@ -38,6 +38,8 @@ workflows:
       - build
       - cypress/install:
           build: 'npm run build' # run a custom app build step
+          requires:
+            - "build"
       - cypress/run: 
           requires:
             - "cypress/install"
