@@ -17,6 +17,23 @@ jobs:
           root: ~/
           paths:
             - .
+  cypress:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Running the application
+          command: cd hello-world && npm ci
+      - run:
+          name: Building the application
+          command: npm run serve
+      - run: 
+          name: Running Tests
+          command: npm run test:components 
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - .
   deploy-production:
     <<: *defaults
     steps:
@@ -36,14 +53,9 @@ workflows:
   build-and-deploy:
     jobs:
       - build
-      - cypress/install:
-          build: 'npm run build' # run a custom app build step
+      - cypress:
           requires:
-            - "build"
-      - cypress/run:
-          start: 'npm run: test:components'
-          requires:
-            - "cypress/install"
+            - build
       - deploy-production:
           context: circlecis3  
           requires:
