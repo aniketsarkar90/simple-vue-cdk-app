@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.15
-  cypress: cypress-io/cypress@1.0.0
+  cypress: cypress-io/cypress@1.26.0
 defaults: &defaults
   docker:
     - image: circleci/node:12
@@ -35,7 +35,13 @@ jobs:
 workflows:  
   cypress-integration:
     jobs:
-      - cypress/run
+      - build
+      - cypress/install:
+          build: 'npm run build' # run a custom app build step
+      - cypress/run: 
+          requires:
+            - "cypress/install"
+
   build-and-deploy:
     jobs:
       - build
